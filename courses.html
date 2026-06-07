@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Courses — IBS Institute of Business Studies</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green: #2e7d32; --green-light: #4caf50; --blue: #1565c0; --blue-light: #1e88e5; --gold: #C9A84C; --gold-light: #E8C97A; }
+  html, body { width: 100%; background: #000; overflow-x: hidden; }
+  body { font-family: 'DM Sans', sans-serif; color: #fff; }
+
+  .glass {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .glass::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.4px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+  }
+
+  nav { padding: 18px 20px; background: #030603; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; border-radius: 9999px; padding: 8px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-left { display: flex; align-items: center; gap: 28px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .ibs-badge { background: linear-gradient(135deg, #1565c0, #2e7d32); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.2); }
+  .ibs-text-stack { display: flex; flex-direction: column; line-height: 1.15; }
+  .ibs-title { font-size: 13.5px; font-weight: 600; color: #fff; letter-spacing: 0.01em; }
+  .ibs-sub { font-size: 9.5px; color: rgba(255,255,255,0.45); letter-spacing: 0.07em; text-transform: uppercase; }
+  .nav-links { display: none; list-style: none; gap: 24px; }
+  @media (min-width: 768px) { .nav-links { display: flex; } }
+  .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13.5px; font-weight: 400; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: #fff; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .btn-enroll { background: var(--green); border: none; color: #fff; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; padding: 9px 20px; border-radius: 9999px; font-weight: 600; transition: all 0.2s; text-decoration: none; }
+  .btn-enroll:hover { background: var(--green-light); transform: translateY(-1px); }
+  .hamburger { display: none; background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; padding: 4px; }
+  @media (max-width: 768px) { .hamburger { display: flex; align-items: center; } .btn-enroll { font-size: 12px; padding: 8px 14px; } }
+
+  .page-header { padding: 60px 20px 36px; background: linear-gradient(to bottom, rgba(3,6,3,0.97), #000); }
+  .page-header-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+  .page-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-light); margin-bottom: 10px; font-weight: 500; }
+  .page-title { font-family: 'Instrument Serif', serif; font-size: clamp(32px, 5vw, 56px); color: #fff; line-height: 1.1; margin-bottom: 12px; }
+  .page-title .italic { font-style: italic; color: rgba(255,255,255,0.38); }
+  .page-desc { font-size: 14.5px; color: rgba(255,255,255,0.48); line-height: 1.7; max-width: 520px; margin: 0 auto 10px; font-weight: 300; }
+
+  .courses-section { padding: 50px 20px 80px; background: #000; }
+  .courses-inner { max-width: 1100px; margin: 0 auto; }
+  .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 22px; }
+
+  .course-card { border-radius: 20px; overflow: hidden; transition: all 0.3s; }
+  .course-card:hover { transform: translateY(-5px); box-shadow: 0 24px 60px rgba(0,0,0,0.55); }
+  .course-img-wrap { position: relative; height: 200px; overflow: hidden; }
+  .course-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .course-card:hover .course-img-wrap img { transform: scale(1.05); }
+  .course-img-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%); }
+  .course-img-badge { position: absolute; top: 12px; right: 12px; color: #fff; font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 9999px; letter-spacing: 0.04em; }
+  .course-img-badge.green { background: var(--green); }
+  .course-img-badge.blue { background: var(--blue); }
+  .course-img-badge.purple { background: #7b1fa2; }
+  .course-img-badge.orange { background: #e65100; }
+  .course-img-badge.dark-green { background: #1b5e20; }
+
+  .course-body { padding: 22px 24px 24px; background: rgba(255,255,255,0.035); border-top: none; }
+  .course-title { font-family: 'Instrument Serif', serif; font-size: 21px; color: #fff; margin-bottom: 8px; }
+  .course-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.65; margin-bottom: 6px; font-weight: 300; }
+  .course-details { list-style: none; margin: 12px 0 16px; display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .course-details li { font-size: 12px; color: rgba(255,255,255,0.55); display: flex; align-items: center; gap: 5px; }
+  .course-details li::before { content: '✓'; color: var(--green-light); font-weight: 700; font-size: 11px; }
+  .course-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .course-tag { display: inline-block; padding: 3px 11px; border-radius: 9999px; font-size: 10.5px; background: rgba(76,175,80,0.12); border: 1px solid rgba(76,175,80,0.25); color: #a5d6a7; }
+  .course-arrow { color: rgba(255,255,255,0.3); font-size: 18px; transition: all 0.2s; text-decoration: none; }
+  .course-card:hover .course-arrow { color: var(--green-light); transform: translateX(3px); }
+
+  .back-section { padding: 20px 20px 40px; background: #000; text-align: center; }
+  .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .back-link:hover { color: #fff; }
+
+  .compare-section { padding: 50px 20px 70px; background: #030603; border-top: 1px solid rgba(255,255,255,0.05); }
+  .compare-inner { max-width: 1100px; margin: 0 auto; }
+  .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .compare-card { border-radius: 16px; padding: 22px 18px; text-align: center; }
+  .compare-icon { font-size: 28px; margin-bottom: 8px; }
+  .compare-name { font-family: 'Instrument Serif', serif; font-size: 17px; color: #fff; margin-bottom: 5px; }
+  .compare-dur { font-size: 11.5px; color: rgba(255,255,255,0.4); font-weight: 300; }
+
+  footer { background: #020402; padding: 48px 20px 28px; border-top: 1px solid rgba(255,255,255,0.05); }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr repeat(2,1fr); gap: 40px; margin-bottom: 36px; }
+  @media (max-width: 640px) { .footer-top { grid-template-columns: 1fr 1fr; } .footer-brand { grid-column: 1/-1; } }
+  .footer-desc { font-size: 12.5px; color: rgba(255,255,255,0.28); line-height: 1.6; max-width: 240px; font-weight: 300; }
+  .footer-col-title { font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.32); margin-bottom: 14px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .footer-links a { color: rgba(255,255,255,0.42); text-decoration: none; font-size: 13px; transition: color 0.2s; font-weight: 300; }
+  .footer-links a:hover { color: rgba(255,255,255,0.75); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .footer-copy { font-size: 11.5px; color: rgba(255,255,255,0.18); }
+  .footer-socials { display: flex; gap: 8px; }
+  .social-btn { width: 32px; height: 32px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.38); transition: all 0.2s; cursor: pointer; text-decoration: none; }
+  .social-btn:hover { color: #fff; background: rgba(255,255,255,0.07); }
+
+  .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(2,5,2,0.97); backdrop-filter: blur(20px); flex-direction: column; align-items: center; justify-content: center; gap: 26px; padding: 80px 20px 40px; min-height: 100vh; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: rgba(255,255,255,0.75); text-decoration: none; font-family: 'Instrument Serif', serif; font-size: 28px; }
+  .mobile-menu a:hover { color: #a5d6a7; }
+  .mobile-close { position: absolute; top: 24px; right: 24px; background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 22px; }
+  .mobile-enroll { background: var(--green); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; padding: 13px 36px; border-radius: 9999px; border: none; cursor: pointer; margin-top: 8px; text-decoration: none; display: inline-block; }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
+  <a href="ibs_website_with_logo_photos.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Home</a>
+  <a href="courses.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Courses</a>
+  <a href="admission.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Admission</a>
+  <a href="contact.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact</a>
+  <a class="mobile-enroll" href="admission.html">Enroll Now</a>
+</div>
+
+<nav>
+  <div class="nav-inner glass">
+    <div class="nav-left">
+      <a href="ibs_website_with_logo_photos.html" class="logo">
+        <div class="ibs-badge">IBS</div>
+        <div class="ibs-text-stack">
+          <span class="ibs-title">Institute of Business Studies</span>
+          <span class="ibs-sub">Shershah, Karachi</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="ibs_website_with_logo_photos.html">Home</a></li>
+        <li><a href="courses.html" class="active">Courses</a></li>
+        <li><a href="admission.html">Admission</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <a class="btn-enroll" href="admission.html">Enroll Now</a>
+      <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><line x1="0" y1="1" x2="22" y2="1" stroke="currentColor" stroke-width="1.5"/><line x1="0" y1="8" x2="22" y2="8" stroke="currentColor" stroke-width="1.5"/><line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<section class="page-header">
+  <div class="page-header-inner">
+    <p class="page-label reveal">Hamare Courses</p>
+    <h1 class="page-title reveal">Har Student ke liye <span class="italic">Sahi Course</span></h1>
+    <p class="page-desc reveal">School taleem se leke modern computer skills aur Spoken English tak — aapka mustaqbil yahan se shuru hota hai. Har course practical aur job-ready hai.</p>
+  </div>
+</section>
+
+<section class="courses-section">
+  <div class="courses-inner">
+    <div class="courses-grid">
+
+      <div class="course-card glass reveal">
+        <div class="course-img-wrap">
+          <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80" alt="School Education" loading="lazy">
+          <div class="course-img-overlay"></div>
+          <div class="course-img-badge green">Play Group – Matric</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">School Education</div>
+          <p class="course-desc">Play Group se Matric tak mukammal taleemi syllabus. Tajurbekar ustaadon ke saath strong academic foundation — Math, Science, Urdu, English sab subjects.</p>
+          <ul class="course-details">
+            <li>Play Group to Matric</li>
+            <li>All Subjects</li>
+            <li>Boys & Girls</li>
+            <li>Exam Preparation</li>
+            <li>Morning Shift</li>
+          </ul>
+          <div class="course-footer">
+            <span class="course-tag">Play Group – Matric</span>
+            <a href="admission.html" class="course-arrow">→</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card glass reveal">
+        <div class="course-img-wrap">
+          <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&q=80" alt="Computer Courses" loading="lazy">
+          <div class="course-img-overlay"></div>
+          <div class="course-img-badge blue">Most Popular</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Computer Courses</div>
+          <p class="course-desc">MS Word, Excel, PowerPoint, Basic Computer Skills, Internet & Email aur Data Entry. Aaj ki job market ke liye zaroori practical computer training.</p>
+          <ul class="course-details">
+            <li>MS Office (Word, Excel, PPT)</li>
+            <li>Basic Computer Skills</li>
+            <li>Internet & Email</li>
+            <li>Data Entry</li>
+            <li>3 – 6 Months</li>
+          </ul>
+          <div class="course-footer">
+            <span class="course-tag">3 – 6 Months</span>
+            <a href="admission.html" class="course-arrow">→</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card glass reveal">
+        <div class="course-img-wrap">
+          <img src="https://images.unsplash.com/photo-1543269664-76bc3997d9ea?w=600&q=80" alt="English Language Course" loading="lazy">
+          <div class="course-img-overlay"></div>
+          <div class="course-img-badge purple">New Batch</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">English Language Course</div>
+          <p class="course-desc">Spoken English, Grammar, Reading & Writing, aur Interview Preparation. Beginners se Advanced tak — apni communication skills improve karein.</p>
+          <ul class="course-details">
+            <li>Spoken English</li>
+            <li>Grammar & Writing</li>
+            <li>Reading Skills</li>
+            <li>Interview Prep</li>
+            <li>Beginners – Advanced</li>
+          </ul>
+          <div class="course-footer">
+            <span class="course-tag">Beginners – Advanced</span>
+            <a href="admission.html" class="course-arrow">→</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card glass reveal">
+        <div class="course-img-wrap">
+          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80" alt="Coaching Classes" loading="lazy">
+          <div class="course-img-overlay"></div>
+          <div class="course-img-badge green">All Subjects</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Coaching Classes</div>
+          <p class="course-desc">Maths, Science, Urdu, English, Islamiyat — chhote groups mein personalized attention. Exams ki tayaari ke liye best coaching Shershah mein.</p>
+          <ul class="course-details">
+            <li>Maths & Science</li>
+            <li>Urdu & English</li>
+            <li>Islamiyat</li>
+            <li>Small Groups</li>
+            <li>All Classes</li>
+          </ul>
+          <div class="course-footer">
+            <span class="course-tag">All Classes</span>
+            <a href="admission.html" class="course-arrow">→</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card glass reveal">
+        <div class="course-img-wrap">
+          <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600&q=80" alt="Extra Curricular Activities" loading="lazy">
+          <div class="course-img-overlay"></div>
+          <div class="course-img-badge orange">Fun Learning</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Extra Curricular Activities</div>
+          <p class="course-desc">Drawing, Arts & Crafts, Quiz competitions, Sports aur Speech events. Taleem ke saath personality aur confidence bhi develop karein.</p>
+          <ul class="course-details">
+            <li>Drawing & Arts</li>
+            <li>Quiz Competitions</li>
+            <li>Sports & Games</li>
+            <li>Speech Events</li>
+            <li>Sab Students</li>
+          </ul>
+          <div class="course-footer">
+            <span class="course-tag">Sab Students</span>
+            <a href="admission.html" class="course-arrow">→</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card glass reveal">
+        <div class="course-img-wrap">
+          <img src="https://images.unsplash.com/photo-1585036156171-384164a8c675?w=600&q=80" alt="Quran & Islamic Studies" loading="lazy">
+          <div class="course-img-overlay"></div>
+          <div class="course-img-badge dark-green">Deen & Akhlaq</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Quran & Islamic Studies</div>
+          <p class="course-desc">Nazra Quran, Tajweed aur Islamic Education — bunyaadi deeni tarbiyat jo bachon ko duniya aur akhirat dono ke liye tayyar karti hai.</p>
+          <ul class="course-details">
+            <li>Nazra Quran</li>
+            <li>Tajweed</li>
+            <li>Islamic Education</li>
+            <li>Dua & Sunnah</li>
+            <li>All Ages</li>
+          </ul>
+          <div class="course-footer">
+            <span class="course-tag">All Ages</span>
+            <a href="admission.html" class="course-arrow">→</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="compare-section" id="compare">
+  <div class="compare-inner">
+    <p class="section-label" style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--green-light);margin-bottom:10px;font-weight:500;text-align:center;">Course Details</p>
+    <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(24px,3.5vw,40px);color:#fff;text-align:center;line-height:1.1;margin-bottom:14px;">Ek Nazar Mein <span class="italic" style="color:rgba(255,255,255,0.38)">Saari Details</span></h2>
+    <p style="font-size:14px;color:rgba(255,255,255,0.42);text-align:center;margin:0 auto 32px;max-width:480px;font-weight:300;">Har course ki duration, shift aur eligibility — sab kuch ek jaga.</p>
+    <div class="compare-grid">
+      <div class="compare-card glass">
+        <div class="compare-icon">🏫</div>
+        <div class="compare-name">School Education</div>
+        <div class="compare-dur">Play Group – Matric<br>Morning 8AM–1PM</div>
+      </div>
+      <div class="compare-card glass">
+        <div class="compare-icon">💻</div>
+        <div class="compare-name">Computer Courses</div>
+        <div class="compare-dur">3 – 6 Months<br>Morning & Evening</div>
+      </div>
+      <div class="compare-card glass">
+        <div class="compare-icon">🗣️</div>
+        <div class="compare-name">English Language</div>
+        <div class="compare-dur">3 – 6 Months<br>Evening 3PM–7PM</div>
+      </div>
+      <div class="compare-card glass">
+        <div class="compare-icon">📐</div>
+        <div class="compare-name">Coaching Classes</div>
+        <div class="compare-dur">Per Session<br>Flexible Timings</div>
+      </div>
+      <div class="compare-card glass">
+        <div class="compare-icon">🎨</div>
+        <div class="compare-name">Extra Curricular</div>
+        <div class="compare-dur">Weekly<br>All Students</div>
+      </div>
+      <div class="compare-card glass">
+        <div class="compare-icon">📖</div>
+        <div class="compare-name">Quran & Islamiyat</div>
+        <div class="compare-dur">Ongoing<br>All Ages</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="back-section">
+  <a href="ibs_website_with_logo_photos.html" class="back-link glass" style="padding:10px 24px;border-radius:9999px;">
+    ← Home Page par Wapas Jayein
+  </a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div class="ibs-badge" style="width:36px;height:36px;font-size:12px;">IBS</div>
+          <div>
+            <div style="font-family:'Instrument Serif',serif;font-size:16px;color:#fff">Institute of Business Studies</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:0.07em;text-transform:uppercase">Shershah, Karachi</div>
+          </div>
+        </div>
+        <p class="footer-desc">Main Jinnah Road, near Mustafa Masjid — jahan taleem, technology aur tarbiyat ka sangam hai.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Courses</div>
+        <ul class="footer-links">
+          <li><a href="courses.html">School Education</a></li>
+          <li><a href="courses.html">Computer Courses</a></li>
+          <li><a href="courses.html">English Language</a></li>
+          <li><a href="courses.html">Coaching Classes</a></li>
+          <li><a href="courses.html">Quran & Islamiyat</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Rabta</div>
+        <ul class="footer-links">
+          <li><a href="tel:+923462776747">+92 346 2776747</a></li>
+          <li><a href="mailto:innovativebeaconschool@gmail.com" style="font-size:11.5px;word-break:break-all">innovativebeaconschool@gmail.com</a></li>
+          <li><a href="contact.html">Shershah, Karachi</a></li>
+          <li><a href="admission.html">Admission Form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Institute of Business Studies, Shershah Karachi.</span>
+      <div class="footer-socials">
+        <a href="https://wa.me/923462776747" class="social-btn glass" aria-label="WhatsApp" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="mailto:innovativebeaconschool@gmail.com" class="social-btn glass" aria-label="Email">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reveals=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver((e)=>{e.forEach((el,i)=>{if(el.isIntersecting){setTimeout(()=>el.target.classList.add('visible'),i*80);obs.unobserve(el.target);}});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+  reveals.forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

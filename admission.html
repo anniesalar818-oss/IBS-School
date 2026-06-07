@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admission — IBS Institute of Business Studies</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green: #2e7d32; --green-light: #4caf50; --blue: #1565c0; --blue-light: #1e88e5; --gold: #C9A84C; --gold-light: #E8C97A; }
+  html, body { width: 100%; background: #000; overflow-x: hidden; }
+  body { font-family: 'DM Sans', sans-serif; color: #fff; }
+
+  .glass {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .glass::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.4px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+  }
+
+  nav { padding: 18px 20px; background: #030603; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; border-radius: 9999px; padding: 8px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-left { display: flex; align-items: center; gap: 28px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .ibs-badge { background: linear-gradient(135deg, #1565c0, #2e7d32); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.2); }
+  .ibs-text-stack { display: flex; flex-direction: column; line-height: 1.15; }
+  .ibs-title { font-size: 13.5px; font-weight: 600; color: #fff; letter-spacing: 0.01em; }
+  .ibs-sub { font-size: 9.5px; color: rgba(255,255,255,0.45); letter-spacing: 0.07em; text-transform: uppercase; }
+  .nav-links { display: none; list-style: none; gap: 24px; }
+  @media (min-width: 768px) { .nav-links { display: flex; } }
+  .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13.5px; font-weight: 400; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: #fff; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .btn-enroll { background: var(--green); border: none; color: #fff; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; padding: 9px 20px; border-radius: 9999px; font-weight: 600; transition: all 0.2s; text-decoration: none; }
+  .btn-enroll:hover { background: var(--green-light); transform: translateY(-1px); }
+  .hamburger { display: none; background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; padding: 4px; }
+  @media (max-width: 768px) { .hamburger { display: flex; align-items: center; } .btn-enroll { font-size: 12px; padding: 8px 14px; } }
+
+  .page-header { padding: 60px 20px 36px; background: linear-gradient(to bottom, rgba(3,6,3,0.97), #000); }
+  .page-header-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+  .page-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-light); margin-bottom: 10px; font-weight: 500; }
+  .page-title { font-family: 'Instrument Serif', serif; font-size: clamp(32px, 5vw, 56px); color: #fff; line-height: 1.1; margin-bottom: 12px; }
+  .page-title .italic { font-style: italic; color: rgba(255,255,255,0.38); }
+  .page-desc { font-size: 14.5px; color: rgba(255,255,255,0.48); line-height: 1.7; max-width: 520px; margin: 0 auto 10px; font-weight: 300; }
+
+  .section { padding: 60px 20px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+
+  .admission-layout { display: flex; gap: 48px; flex-wrap: wrap; }
+  .admission-left { flex: 1; min-width: 280px; }
+  .admission-right { flex: 1; min-width: 300px; }
+
+  .enroll-card { border-radius: 24px; padding: 30px; }
+  .enroll-title { font-family: 'Instrument Serif', serif; font-size: 26px; color: #fff; margin-bottom: 5px; }
+  .enroll-sub { font-size: 13px; color: rgba(255,255,255,0.38); margin-bottom: 22px; font-weight: 300; line-height: 1.5; }
+  .form-field { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 15px; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 13.5px; margin-bottom: 10px; outline: none; transition: all 0.2s; }
+  .form-field::placeholder { color: rgba(255,255,255,0.28); }
+  .form-field:focus { border-color: rgba(76,175,80,0.45); background: rgba(255,255,255,0.09); }
+  .form-select { appearance: none; cursor: pointer; }
+  .form-select option { background: #0a100a; }
+  .submit-btn { width: 100%; background: var(--green); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; padding: 13px; border-radius: 10px; border: none; cursor: pointer; transition: all 0.2s; }
+  .submit-btn:hover { background: var(--green-light); }
+
+  .info-card { border-radius: 20px; padding: 6px 0; margin-bottom: 20px; }
+  .info-row { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .info-row:last-child { border-bottom: none; }
+  .info-icon { width: 36px; height: 36px; border-radius: 9px; background: rgba(46,125,50,0.12); border: 1px solid rgba(46,125,50,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+  .info-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.32); margin-bottom: 3px; }
+  .info-value { font-size: 13.5px; color: rgba(255,255,255,0.82); line-height: 1.5; }
+  .info-value a { color: #90caf9; text-decoration: none; }
+  .info-value a:hover { text-decoration: underline; }
+
+  .steps-section { background: #030603; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  .step-card { border-radius: 18px; padding: 26px 20px; text-align: center; }
+  .step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-family: 'Instrument Serif', serif; font-size: 20px; color: #fff; }
+  .step-title { font-family: 'Instrument Serif', serif; font-size: 17px; color: #fff; margin-bottom: 6px; }
+  .step-desc { font-size: 12.5px; color: rgba(255,255,255,0.45); line-height: 1.6; font-weight: 300; }
+
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .why-card { border-radius: 18px; padding: 24px 20px; }
+  .why-icon { font-size: 28px; margin-bottom: 8px; }
+  .why-title { font-family: 'Instrument Serif', serif; font-size: 17px; color: #fff; margin-bottom: 6px; }
+  .why-desc { font-size: 12.5px; color: rgba(255,255,255,0.45); line-height: 1.6; font-weight: 300; }
+
+  .faq-item { border-radius: 16px; padding: 18px 22px; margin-bottom: 10px; cursor: pointer; }
+  .faq-q { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #fff; font-weight: 400; }
+  .faq-q span { font-size: 18px; color: rgba(255,255,255,0.3); transition: transform 0.2s; }
+  .faq-item.open .faq-q span { transform: rotate(45deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding-top: 0; font-size: 13px; color: rgba(255,255,255,0.48); line-height: 1.6; font-weight: 300; }
+  .faq-item.open .faq-a { max-height: 200px; padding-top: 12px; }
+
+  .back-section { padding: 20px 20px 40px; background: #000; text-align: center; }
+  .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .back-link:hover { color: #fff; }
+
+  footer { background: #020402; padding: 48px 20px 28px; border-top: 1px solid rgba(255,255,255,0.05); }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr repeat(2,1fr); gap: 40px; margin-bottom: 36px; }
+  @media (max-width: 640px) { .footer-top { grid-template-columns: 1fr 1fr; } .footer-brand { grid-column: 1/-1; } }
+  .footer-desc { font-size: 12.5px; color: rgba(255,255,255,0.28); line-height: 1.6; max-width: 240px; font-weight: 300; }
+  .footer-col-title { font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.32); margin-bottom: 14px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .footer-links a { color: rgba(255,255,255,0.42); text-decoration: none; font-size: 13px; transition: color 0.2s; font-weight: 300; }
+  .footer-links a:hover { color: rgba(255,255,255,0.75); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .footer-copy { font-size: 11.5px; color: rgba(255,255,255,0.18); }
+  .footer-socials { display: flex; gap: 8px; }
+  .social-btn { width: 32px; height: 32px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.38); transition: all 0.2s; cursor: pointer; text-decoration: none; }
+  .social-btn:hover { color: #fff; background: rgba(255,255,255,0.07); }
+
+  .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(2,5,2,0.97); backdrop-filter: blur(20px); flex-direction: column; align-items: center; justify-content: center; gap: 26px; padding: 80px 20px 40px; min-height: 100vh; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: rgba(255,255,255,0.75); text-decoration: none; font-family: 'Instrument Serif', serif; font-size: 28px; }
+  .mobile-menu a:hover { color: #a5d6a7; }
+  .mobile-close { position: absolute; top: 24px; right: 24px; background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 22px; }
+  .mobile-enroll { background: var(--green); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; padding: 13px 36px; border-radius: 9999px; border: none; cursor: pointer; margin-top: 8px; text-decoration: none; display: inline-block; }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
+  <a href="ibs_website_with_logo_photos.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Home</a>
+  <a href="courses.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Courses</a>
+  <a href="admission.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Admission</a>
+  <a href="contact.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact</a>
+  <a class="mobile-enroll" href="admission.html">Enroll Now</a>
+</div>
+
+<nav>
+  <div class="nav-inner glass">
+    <div class="nav-left">
+      <a href="ibs_website_with_logo_photos.html" class="logo">
+        <div class="ibs-badge">IBS</div>
+        <div class="ibs-text-stack">
+          <span class="ibs-title">Institute of Business Studies</span>
+          <span class="ibs-sub">Shershah, Karachi</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="ibs_website_with_logo_photos.html">Home</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="admission.html" class="active">Admission</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <a class="btn-enroll" href="admission.html">Enroll Now</a>
+      <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><line x1="0" y1="1" x2="22" y2="1" stroke="currentColor" stroke-width="1.5"/><line x1="0" y1="8" x2="22" y2="8" stroke="currentColor" stroke-width="1.5"/><line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<section class="page-header">
+  <div class="page-header-inner">
+    <p class="page-label reveal">Admission 2026</p>
+    <h1 class="page-title reveal">Apna Andaz <span class="italic">Dikhayein</span></h1>
+    <p class="page-desc reveal">IBS mein admission lena ab aur bhi aasan. Form bharein, hum aapse rabta karein, aur apna course shuru karein.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:20px">
+  <div class="section-inner">
+    <div class="admission-layout">
+      <div class="admission-left reveal">
+        <p class="section-label" style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--green-light);margin-bottom:10px;font-weight:500;">Form Bharne Se Pehle</p>
+        <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(22px,3vw,34px);color:#fff;line-height:1.15;margin-bottom:8px;">Admission <span class="italic" style="color:rgba(255,255,255,0.38);">Process</span></h2>
+        <p style="font-size:13.5px;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:28px;font-weight:300;">Teen aasan steps mein admission mukammal karein.</p>
+
+        <div class="info-card glass">
+          <div class="info-row">
+            <div class="info-icon">📋</div>
+            <div>
+              <div class="info-label">Step 1</div>
+              <div class="info-value">Form bharein — online ya school aake</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">📞</div>
+            <div>
+              <div class="info-label">Step 2</div>
+              <div class="info-value">Hum 24 ghante mein confirm karte hain</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">🎒</div>
+            <div>
+              <div class="info-label">Step 3</div>
+              <div class="info-value">Documents submit karein aur classes join karein</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">✅</div>
+            <div>
+              <div class="info-label">Required Documents</div>
+              <div class="info-value">B-form / Child Registration Certificate • 2 passport-size photos • Previous school certificate (agar ho to)</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">🕐</div>
+            <div>
+              <div class="info-label">Timings</div>
+              <div class="info-value">Morning: 8:00 AM – 1:00 PM<br>Evening: 3:00 PM – 7:00 PM</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card glass" style="margin-top:20px">
+          <div class="info-row">
+            <div class="info-icon">📍</div>
+            <div>
+              <div class="info-label">Address</div>
+              <div class="info-value">Main Jinnah Road, near Mustafa Masjid, Shershah, Karachi</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">📞</div>
+            <div>
+              <div class="info-label">Phone / WhatsApp</div>
+              <div class="info-value"><a href="tel:+923462776747">+92 346 2776747</a></div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">✉️</div>
+            <div>
+              <div class="info-label">Email</div>
+              <div class="info-value"><a href="mailto:innovativebeaconschool@gmail.com">innovativebeaconschool@gmail.com</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admission-right reveal">
+        <div class="enroll-card glass" id="enroll-form">
+          <div class="enroll-title">Admission Lein</div>
+          <p class="enroll-sub">Form bharein — hum 24 ghante mein aapse rabta karenge.</p>
+          <input class="form-field" type="text" placeholder="Student ka Naam">
+          <input class="form-field" type="text" placeholder="Walid / Guardian ka Naam">
+          <input class="form-field" type="tel" placeholder="Phone Number">
+          <input class="form-field" type="email" placeholder="Email (optional)">
+          <input class="form-field" type="text" placeholder="Address">
+          <select class="form-field form-select">
+            <option value="" disabled selected>Course / Class Choose Karein</option>
+            <option>School Education (Play Group – Class 5)</option>
+            <option>School Education (Class 6 – Matric)</option>
+            <option>Computer Course – Basic</option>
+            <option>Computer Course – MS Office</option>
+            <option>English Language Course</option>
+            <option>Coaching Classes</option>
+            <option>Quran & Islamic Studies</option>
+            <option>Extra Curricular Activities</option>
+          </select>
+          <select class="form-field form-select">
+            <option value="" disabled selected>Shift Prefer Karein</option>
+            <option>Morning Shift (8 AM – 1 PM)</option>
+            <option>Evening Shift (3 PM – 7 PM)</option>
+          </select>
+          <button class="submit-btn" id="submitBtn">Form Jama Karein →</button>
+          <p style="font-size:11px;color:rgba(255,255,255,0.2);text-align:center;margin-top:14px">Ya direct call karein: <a href="tel:+923462776747" style="color:rgba(165,214,167,0.6);text-decoration:none">+92 346 2776747</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section steps-section">
+  <div class="section-inner">
+    <p class="section-label reveal" style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--green-light);margin-bottom:10px;font-weight:500;text-align:center">Aasan Steps</p>
+    <h2 class="reveal" style="font-family:'Instrument Serif',serif;font-size:clamp(24px,3.5vw,40px);color:#fff;text-align:center;line-height:1.1;margin-bottom:32px;">Admission kaise lein? <span class="italic" style="color:rgba(255,255,255,0.38);">Yeh dekhein</span></h2>
+    <div class="steps-grid">
+      <div class="step-card glass reveal">
+        <div class="step-num">1</div>
+        <div class="step-title">Form Bharein</div>
+        <div class="step-desc">Yahan diye gaye form mein apni details fill karein. Aap school aa kar bhi form le sakte hain.</div>
+      </div>
+      <div class="step-card glass reveal">
+        <div class="step-num">2</div>
+        <div class="step-title">Confirmation</div>
+        <div class="step-desc">Hum aapki details check karke 24 ghante mein aapse rabta karenge aur admission confirm karenge.</div>
+      </div>
+      <div class="step-card glass reveal">
+        <div class="step-num">3</div>
+        <div class="step-title">Documents Submit</div>
+        <div class="step-desc">B-form, photos aur previous school certificate (agar ho to) school mein submit karein.</div>
+      </div>
+      <div class="step-card glass reveal">
+        <div class="step-num">4</div>
+        <div class="step-title">Classes Start</div>
+        <div class="step-desc">Apne course aur shift ke mutabiq classes join karein aur apna safar shuru karein.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <p class="section-label reveal" style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--green-light);margin-bottom:10px;font-weight:500;text-align:center">IBS Kyun?</p>
+    <h2 class="reveal" style="font-family:'Instrument Serif',serif;font-size:clamp(24px,3.5vw,40px);color:#fff;text-align:center;line-height:1.1;margin-bottom:32px;">IBS ku<u>n</u> chunein? <span class="italic" style="color:rgba(255,255,255,0.38);">Wajahain</span></h2>
+    <div class="why-grid">
+      <div class="why-card glass reveal">
+        <div class="why-icon">👨‍🏫</div>
+        <div class="why-title">Tajurbekar Ustaad</div>
+        <div class="why-desc">Har subject ke liye expert aur experienced teachers jo har student ko individual attention dete hain.</div>
+      </div>
+      <div class="why-card glass reveal">
+        <div class="why-icon">💵</div>
+        <div class="why-title">Kifayati Fees</div>
+        <div class="why-desc">Har khas o aam ke liye affordable fees. Taleem ka haq sab ka hai — yehi IBS ka aqeeda hai.</div>
+      </div>
+      <div class="why-card glass reveal">
+        <div class="why-icon">⏰</div>
+        <div class="why-title">Double Shift</div>
+        <div class="why-desc">Morning aur Evening shift — aapki sahulat ke hisaab se koi bhi shift choose karein.</div>
+      </div>
+      <div class="why-card glass reveal">
+        <div class="why-icon">📚</div>
+        <div class="why-title">Mukammal Taleem</div>
+        <div class="why-desc">School education, computer skills, English, coaching aur deeni tarbiyat — ek hi jagah.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section steps-section">
+  <div class="section-inner">
+    <p class="section-label reveal" style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--green-light);margin-bottom:10px;font-weight:500;text-align:center">Sawaal Jawab</p>
+    <h2 class="reveal" style="font-family:'Instrument Serif',serif;font-size:clamp(24px,3.5vw,40px);color:#fff;text-align:center;line-height:1.1;margin-bottom:32px;">Aksar pooche jaane wale <span class="italic" style="color:rgba(255,255,255,0.38);">Sawaal</span></h2>
+    <div style="max-width:680px;margin:0 auto">
+      <div class="faq-item glass" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Admission ke liye kya age limit hai? <span>+</span></div>
+        <div class="faq-a">Koi age limit nahi. Play Group se le-kar adults tak — har koi admission le sakta hai. Har umar ke liye course available hai.</div>
+      </div>
+      <div class="faq-item glass" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Kya mein ek saath do courses le sakta hoon? <span>+</span></div>
+        <div class="faq-a">Bilkul! Aap School Education ke saath Computer Course ya English Language Course bhi le sakte hain. Timings adjust ki ja sakti hain.</div>
+      </div>
+      <div class="faq-item glass" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Fees kya hai? <span>+</span></div>
+        <div class="faq-a">Fees course aur class ke mutabiq mukhtalif hai. Barah-e-karam school aayein ya call karein — hum aapko mukammal fee details de denge.</div>
+      </div>
+      <div class="faq-item glass" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Kya certificate milta hai? <span>+</span></div>
+        <div class="faq-a">Haan, course mukammal karne par IBS ki taraf se certificate diya jata hai jo aapke skills ko officially recognize karata hai.</div>
+      </div>
+      <div class="faq-item glass" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Shifts kaise hain? <span>+</span></div>
+        <div class="faq-a">Morning shift subah 8 AM se 1 PM tak aur evening shift 3 PM se 7 PM tak hai. Aap apni sahulat ke mutabiq shift choose karein.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="back-section">
+  <a href="ibs_website_with_logo_photos.html" class="back-link glass" style="padding:10px 24px;border-radius:9999px;">
+    ← Home Page par Wapas Jayein
+  </a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div class="ibs-badge" style="width:36px;height:36px;font-size:12px;">IBS</div>
+          <div>
+            <div style="font-family:'Instrument Serif',serif;font-size:16px;color:#fff">Institute of Business Studies</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:0.07em;text-transform:uppercase">Shershah, Karachi</div>
+          </div>
+        </div>
+        <p class="footer-desc">Main Jinnah Road, near Mustafa Masjid — jahan taleem, technology aur tarbiyat ka sangam hai.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Courses</div>
+        <ul class="footer-links">
+          <li><a href="courses.html">School Education</a></li>
+          <li><a href="courses.html">Computer Courses</a></li>
+          <li><a href="courses.html">English Language</a></li>
+          <li><a href="courses.html">Coaching Classes</a></li>
+          <li><a href="courses.html">Quran & Islamiyat</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Rabta</div>
+        <ul class="footer-links">
+          <li><a href="tel:+923462776747">+92 346 2776747</a></li>
+          <li><a href="mailto:innovativebeaconschool@gmail.com" style="font-size:11.5px;word-break:break-all">innovativebeaconschool@gmail.com</a></li>
+          <li><a href="contact.html">Shershah, Karachi</a></li>
+          <li><a href="admission.html">Admission Form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Institute of Business Studies, Shershah Karachi.</span>
+      <div class="footer-socials">
+        <a href="https://wa.me/923462776747" class="social-btn glass" aria-label="WhatsApp" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="mailto:innovativebeaconschool@gmail.com" class="social-btn glass" aria-label="Email">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('submitBtn').addEventListener('click',function(){
+    this.textContent='Shukriya! Hum Rabta Karenge ✓';
+    this.style.background='#1b5e20';this.disabled=true;
+  });
+
+  const reveals=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver((e)=>{e.forEach((el,i)=>{if(el.isIntersecting){setTimeout(()=>el.target.classList.add('visible'),i*80);obs.unobserve(el.target);}});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+  reveals.forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
