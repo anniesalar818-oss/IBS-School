@@ -351,10 +351,10 @@
         <div class="enroll-card glass" id="enroll-form">
           <div class="enroll-title">Admission Lein</div>
           <p class="enroll-sub">Form bharein — hum 24 ghante mein aapse rabta karenge.</p>
-          <input class="form-field" type="text" placeholder="Student ka Naam">
-          <input class="form-field" type="text" placeholder="Walid / Guardian ka Naam">
-          <input class="form-field" type="tel" placeholder="Phone Number">
-          <select class="form-field form-select">
+          <input class="form-field" type="text" id="studentName" placeholder="Student ka Naam">
+          <input class="form-field" type="text" id="guardianName" placeholder="Walid / Guardian ka Naam">
+          <input class="form-field" type="tel" id="phone" placeholder="Phone Number">
+          <select class="form-field form-select" id="course">
             <option value="" disabled selected style="background:#0a100a">Course / Class Choose Karein</option>
             <option style="background:#0a100a">School Education (Play Group – Class 5)</option>
             <option style="background:#0a100a">School Education (Class 6 – Matric)</option>
@@ -365,7 +365,7 @@
             <option style="background:#0a100a">Quran & Islamic Studies</option>
             <option style="background:#0a100a">Extra Curricular Activities</option>
           </select>
-          <select class="form-field form-select">
+          <select class="form-field form-select" id="shift">
             <option value="" disabled selected style="background:#0a100a">Shift Prefer Karein</option>
             <option style="background:#0a100a">Morning Shift (8 AM – 1 PM)</option>
             <option style="background:#0a100a">Evening Shift (3 PM – 7 PM)</option>
@@ -440,9 +440,21 @@
   video.addEventListener('timeupdate',()=>{if(!fadingOut&&video.duration&&(video.duration-video.currentTime)<=0.55){fadingOut=true;fadeOut();}});
   video.addEventListener('ended',()=>{video.style.opacity=0;cancelAnim();setTimeout(()=>{video.currentTime=0;fadingOut=false;video.play();fadeIn();},100);});
 
-  document.getElementById('submitBtn').addEventListener('click',function(){
-    this.textContent='Shukriya! Hum Rabta Karenge ✓';
-    this.style.background='#1b5e20';this.disabled=true;
+  document.getElementById('submitBtn').addEventListener('click',async function(){
+    const btn=this;
+    const name=document.getElementById('studentName').value.trim();
+    const phone=document.getElementById('phone').value.trim();
+    const course=document.getElementById('course').value;
+    const shift=document.getElementById('shift').value;
+    const guardian=document.getElementById('guardianName').value.trim();
+    if(!name||!phone){alert('Student ka naam aur phone number zaroori hai');return;}
+    btn.disabled=true;btn.textContent='Bhej raha hai...';
+    try{
+      const res=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name+(guardian?' ('+guardian+')':''),email:'admission@ibs.edu',phone,message:course+(shift?' - '+shift:'')})});
+      const result=await res.json();
+      if(result.success){btn.textContent='Shukriya! Hum Rabta Karenge ✓';btn.style.background='#1b5e20';}
+      else{alert(result.error||'Kuch gadbad ho gayi');btn.disabled=false;btn.textContent='Form Jama Karein →';}
+    }catch(err){alert('Server se connect nahi ho paaya');btn.disabled=false;btn.textContent='Form Jama Karein →';}
   });
 
   const reveals=document.querySelectorAll('.reveal');
