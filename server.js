@@ -120,14 +120,16 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
+async function startServer() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 10000 });
     console.log('MongoDB connected!');
-    app.listen(PORT, () => {
-      console.log(`Server chal raha hai: http://localhost:${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
+  } catch (err) {
+    console.error('MongoDB connection failed, server still running:', err.message);
+  }
+  app.listen(PORT, () => {
+    console.log(`Server chal raha hai: http://localhost:${PORT}`);
   });
+}
+
+startServer();
