@@ -21,10 +21,14 @@ const EXCEL_FILE = path.join(DATA_DIR, 'contacts.xlsx');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_PASS,
   },
+  tls: { rejectUnauthorized: false },
 });
 
 function appendToExcel(data) {
@@ -83,9 +87,9 @@ app.post('/api/contact', async (req, res) => {
       `,
     };
 
-    await transporter.sendMail(mailOptions);
+    transporter.sendMail(mailOptions).catch(err => console.error('Email error:', err.message));
 
-    res.json({ success: true, message: 'Message mil gaya! Email bhi bhej diya.' });
+    res.json({ success: true, message: 'Message mil gaya!' });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ success: false, error: 'Kuch gadbad ho gayi. Dobara try karein.' });
