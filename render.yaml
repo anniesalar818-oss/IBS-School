@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ibs-school
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_PASS
+        sync: false
+      - key: RECEIVER_EMAIL
+        sync: false
+      - key: PORT
+        value: 3000
