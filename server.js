@@ -1,10 +1,9 @@
 require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
-const XLSX = require('xlsx');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,10 +13,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const DATA_DIR = path.join(__dirname, 'data');
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
+const contactSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  phone: String,
+  message: { type: String, required: true },
+  date: { type: Date, default: Date.now }
+});
 
-const EXCEL_FILE = path.join(DATA_DIR, 'contacts.xlsx');
+const Contact = mongoose.model('Contact', contactSchema);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -31,37 +35,6 @@ const transporter = nodemailer.createTransport({
   tls: { rejectUnauthorized: false },
 });
 
-function appendToExcel(data) {
-  let workbook;
-  if (fs.existsSync(EXCEL_FILE)) {
-    workbook = XLSX.readFile(EXCEL_FILE);
-  } else {
-    workbook = XLSX.utils.book_new();
-  }
-
-  let worksheet;
-  const newRow = {
-    Name: data.name,
-    Email: data.email,
-    Phone: data.phone,
-    Message: data.message,
-    Date: new Date().toLocaleString('en-PK', { timeZone: 'Asia/Karachi' }),
-  };
-
-  if (workbook.SheetNames.includes('Contacts')) {
-    worksheet = workbook.Sheets['Contacts'];
-    const existingData = XLSX.utils.sheet_to_json(worksheet);
-    existingData.push(newRow);
-    worksheet = XLSX.utils.json_to_sheet(existingData);
-  } else {
-    worksheet = XLSX.utils.json_to_sheet([newRow]);
-  }
-
-  workbook.Sheets['Contacts'] = worksheet;
-  workbook.SheetNames = ['Contacts'];
-  XLSX.writeFile(workbook, EXCEL_FILE);
-}
-
 app.post('/api/contact', async (req, res) => {
   const { name, email, phone, message } = req.body;
 
@@ -70,7 +43,8 @@ app.post('/api/contact', async (req, res) => {
   }
 
   try {
-    appendToExcel({ name, email, phone, message });
+    const contact = new Contact({ name, email, phone, message });
+    await contact.save();
 
     const mailOptions = {
       from: process.env.GMAIL_USER,
@@ -96,22 +70,27 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-app.get('/api/contacts', (req, res) => {
-  if (!fs.existsSync(EXCEL_FILE)) {
-    return res.json({ success: true, data: [] });
+app.get('/api/contacts', async (req, res) => {
+  try {
+    const data = await Contact.find().sort({ date: -1 });
+    res.json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Data load nahi ho paya' });
   }
-  const workbook = XLSX.readFile(EXCEL_FILE);
-  if (workbook.SheetNames.includes('Contacts')) {
-    const data = XLSX.utils.sheet_to_json(workbook.Sheets['Contacts']);
-    return res.json({ success: true, data });
-  }
-  res.json({ success: true, data: [] });
 });
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server chal raha hai: http://localhost:${PORT}`);
-});
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('MongoDB connected!');
+    app.listen(PORT, () => {
+      console.log(`Server chal raha hai: http://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
