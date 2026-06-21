@@ -1,11 +1,10 @@
 {
   "name": "contact-website",
   "version": "1.0.0",
-  "description": "Contact form with email notification and Excel save",
-  "main": "local-server.js",
+  "description": "IBS School Contact Website",
   "scripts": {
-    "start": "node local-server.js",
-    "dev": "node local-server.js"
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
