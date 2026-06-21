@@ -1,17 +1,8 @@
 {
-  "name": "contact-website",
+  "name": "ibs-school",
   "version": "1.0.0",
-  "description": "IBS School Contact Website",
-  "scripts": {
-    "start": "node server/index.js",
-    "dev": "node server/index.js"
-  },
+  "private": true,
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "mongoose": "^9.7.1",
-    "nodemailer": "^6.9.7",
-    "xlsx": "^0.18.5"
+    "nodemailer": "^6.9.7"
   }
 }
