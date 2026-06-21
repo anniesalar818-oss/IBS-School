@@ -2,10 +2,10 @@
   "name": "contact-website",
   "version": "1.0.0",
   "description": "Contact form with email notification and Excel save",
-  "main": "server.js",
+  "main": "local-server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node local-server.js",
+    "dev": "node local-server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
