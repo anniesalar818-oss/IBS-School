@@ -1,6 +1,0 @@
-{
-  "public": true,
-  "rewrites": [
-    { "source": "/api/contact", "destination": "/api/contact.js" }
-  ]
-}
