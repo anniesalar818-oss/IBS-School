@@ -1,0 +1,8 @@
+{
+  "buildCommand": null,
+  "outputDirectory": "public",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/contact", "destination": "/api/contact.js" }
+  ]
+}
